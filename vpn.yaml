@@ -1,0 +1,50 @@
+proxies:
+- name: VPN SG WORRY
+  type: vmess
+  server: 104.17.3.81
+  port: 80
+  alterId: 0
+  cipher: auto
+  uuid: e40b2de3-b829-4591-a7b6-99d1913f3246
+  udp: true
+  tls: false
+  servername: w.evouch77.live
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /worryfree
+    headers:
+      Host: w.evouch77.live
+    interface-name: eth2
+- name: VPN ID
+  type: vmess
+  server: 104.17.3.81
+  port: 80
+  alterId: 0
+  cipher: auto
+  uuid: e377fdad-8ab8-4bd4-acee-80663a00abea
+  udp: true
+  tls: false
+  servername: idn.evouch77.me
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /v2ray
+    headers:
+      Host: idn.evouch77.me
+    interface-name: eth2
+#Expired On     : 2023-05-20
+- name: SG GO
+  server: 104.17.3.81
+  port: 2096
+  type: trojan
+  password: user2522
+  network: ws
+  sni: z1.evouch.tech
+  skip-cert-verify: true
+  udp: true
+  ws-opts:
+    path: /trojango
+    headers:
+        Host: z1.evouch.tech
+#Expired On     : 2023-03-27
