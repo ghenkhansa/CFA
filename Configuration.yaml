@@ -1,0 +1,181 @@
+---
+port: 7890
+socks-port: 7891
+redir-port: 7892
+tproxy-port: 7895
+mixed-port: 7893
+allow-lan: true
+mode: rule
+log-level: info
+ipv6: false
+external-controller: 0.0.0.0:9090
+external-ui: "/usr/share/openclash/ui"
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  listen: 0.0.0.0:7874
+  fallback-filter:
+    geoip: true
+    geoip-code: ID
+    ipcidr:
+    - 0.0.0.0/8
+    - 10.0.0.0/8
+    - 100.64.0.0/10
+    - 127.0.0.0/8
+    - 169.254.0.0/16
+    - 172.24.0.0/16
+    - 172.16.0.0/12
+    - 192.0.0.0/24
+    - 192.0.2.0/24
+    - 192.88.99.0/24
+    - 192.168.0.0/16
+    - 198.18.0.0/15
+    - 198.51.100.0/24
+    - 203.0.113.0/24
+    - 224.0.0.0/4
+    - 240.0.0.0/4
+    - 255.255.255.255/32
+    domain:
+    - "+.google.com"
+    - "+.netflix.com"
+    - "+.facebook.com"
+    - "+.youtube.com"
+    - "+.githubusercontent.com"
+    - "+.googlevideo.com"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - msftconnecttest.com
+    - msftncsi.com
+  fake-ip-filter:
+  - "+.pool.ntp.org"
+  - ntp7.*.com
+  - ntp6.*.com
+  - ntp5.*.com
+  - ntp4.*.com
+  - ntp3.*.com
+  - ntp2.*.com
+  - ntp1.*.com
+  - ntp.*.com
+  - time7.*.com
+  - time6.*.com
+  - time5.*.com
+  - time4.*.com
+  - time3.*.com
+  - time2.*.com
+  - time1.*.com
+  - time.*.apple.com
+  - time.*.edu.cn
+  - time.*.gov
+  - time.*.com
+  - "*.home.arpa"
+  - "*.local"
+  - "*.test"
+  - "*.localhost"
+  - "*.invalid"
+  - "*.example"
+  - "*.localdomain"
+  - time1.cloud.tencent.com
+  - "*.ntp.org"
+  - "*.time.edu"
+  - "*.lan"
+  - "*.ntp.org.cn"
+  - "*.time.edu.cn"
+  - "+.*"
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver:
+  - 192.168.8.1
+  - 9.9.9.10
+  - 149.112.112.10
+  - 8.8.8.8
+  - 8.8.4.4
+  - 1.1.1.1
+  - 1.0.0.1
+  - 192.168.9.1
+  nameserver:
+  - dhcp://"usb0"
+  - 192.168.9.1
+  - 8.8.8.8
+  - 8.8.4.4
+  - https://dns.google/dns-query
+  - tls://dns.google
+  - 1.1.1.1
+  - 1.0.0.1
+rule-providers:
+  Direct:
+    type: http
+    behavior: domain
+    path: "./rule_provider/direct.yaml"
+    url: https://raw.githubusercontent.com/ghenkhansa/CFA/main/direct.yaml
+    interval: 3600
+  Reject:
+    type: http
+    behavior: domain
+    path: "./rule_provider/reject.yaml"
+    url: https://raw.githubusercontent.com/ghenkhansa/CFA/main/reject.yaml
+    interval: 3600
+  Basicads:
+    type: http
+    behavior: domain
+    path: "./rule_provider/basicads.yaml"
+    url: https://raw.githubusercontent.com/ghenkhansa/config-CMA/main/basicads.yaml
+    interval: 3600
+  Personalads:
+    type: http
+    behavior: classical
+    path: "./rule_provider/personalads.yaml"
+    url: https://raw.githubusercontent.com/ghenkhansa/config-CMA/main/personalads.yaml
+    interval: 3600
+  18+:
+    type: http
+    behavior: domain
+    path: "./rule_provider/18+.yaml"
+    url: https://raw.githubusercontent.com/ghenkhansa/config-CMA/main/18%2B.yaml
+    interval: 3600
+  Nsfw:
+    type: http
+    behavior: domain
+    path: "./rule_provider/nsfw.yaml"
+    url: https://raw.githubusercontent.com/ghenkhansa/config-CMA/main/nsfw.yaml
+    interval: 3600
+proxy-providers:
+  Akun:
+    type: http
+    path: ./proxy_provider/vpn.yaml
+    url: https://raw.githubusercontent.com/ghenkhansa/CFA/main/vpn.yaml
+    interval: 3600
+    health-check:
+      enable: true
+      url: http://www.gstatic.com/generate_204
+      interval: 99
+proxy-groups:
+- name: VPN
+  type: select
+  strategy: round-robin
+  disable-udp: false
+  use:
+  - Akun
+  url: http://www.gstatic.com/generate_204
+  interval: '300'
+- name: AdBlock
+  type: select
+  disable-udp: false
+  proxies:
+  - VPN
+  - REJECT
+- name: 18+
+  type: select
+  disable-udp: false
+  proxies:
+  - VPN
+  - REJECT
+rules:
+- IP-CIDR,198.18.0.1/16,REJECT,no-resolve
+- DOMAIN-SUFFIX,googlesyndication.com,VPN
+- RULE-SET,Personalads,AdBlock
+- RULE-SET,Basicads,AdBlock
+- RULE-SET,18+,18+
+- RULE-SET,Nsfw,18+
+- RULE-SET,Direct,DIRECT
+- RULE-SET,Reject,REJECT
+- MATCH,VPN
