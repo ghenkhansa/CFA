@@ -1,20 +1,37 @@
 proxies:
-- name: VPN SG WORRY
+- name: SG FASTSSH
   type: vmess
   server: 104.17.3.81
   port: 80
   alterId: 0
   cipher: auto
-  uuid: e40b2de3-b829-4591-a7b6-99d1913f3246
+  uuid: d8d69370-e9a4-11ed-b539-205c6d5f5d78
   udp: true
   tls: false
-  servername: w.eo7.tech
+  servername: sg-8.0rd.net
   skip-cert-verify: true
   network: ws
   ws-opts:
-    path: /worryfree
+    path: /d4nx9bac
     headers:
-      Host: w.eo7.tech
+      Host: sg-8.0rd.net
+    interface-name: eth2
+- name: VPN SSHKIT
+  type: vmess
+  server: 104.17.3.81
+  port: 80
+  alterId: 0
+  cipher: auto
+  uuid: c6747da4-fb2e-4a2a-bdb7-8614bdd6b0b3
+  udp: true
+  tls: false
+  servername: sg3-v2ray.sshkit.org
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /sshkit/1430194751/645148539660d/
+    headers:
+      Host: sg3-v2ray.sshkit.org
     interface-name: eth2
 - name: VPN ID
   type: vmess
