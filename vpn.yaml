@@ -1,5 +1,22 @@
 proxies:
-
+- name: VPN serverssh.net
+  type: vmess
+  server: 104.17.3.81
+  port: 80
+  alterId: 0
+  cipher: auto
+  uuid: bbcbaa2a-befe-45fa-a071-88504de396bb
+  udp: true
+  tls: false
+  servername: sg1ray.serverip.my.id
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /serverssh.net
+    headers:
+      Host: sg1ray.serverip.my.id
+    interface-name: eth2
+#Expired On     : 2023-06-2
 - name: VPN SSHKIT
   type: vmess
   server: 104.17.3.81
@@ -17,38 +34,39 @@ proxies:
     headers:
       Host: sg3-v2ray.sshkit.org
     interface-name: eth2
-- name: VPN ID
+- name: VPN SG Ocean
   type: vmess
   server: 104.17.3.81
   port: 80
   alterId: 0
   cipher: auto
-  uuid: e377fdad-8ab8-4bd4-acee-80663a00abea
+  uuid: 8bb07c55-0ef5-4d69-b131-fd9bab420ae8
   udp: true
   tls: false
-  servername: idn.ev77.me
+  servername: 8fhq6a.aiossh.my.id
   skip-cert-verify: true
   network: ws
   ws-opts:
     path: /v2ray
     headers:
-      Host: idn.ev77.me
+      Host: 8fhq6a.aiossh.my.id
     interface-name: eth2
-#Expired On     : 2023-05-20
-- name: WORRY
+#Expired On     : 2023-06-2
+- name: SG OCEAN
   type: vmess
   server: 104.17.3.81
   port: 80
   alterId: 0
   cipher: auto
-  uuid: 92ed5785-c5c3-455b-92ea-a6e1bbd0459f
+  uuid: b2e1db74-490a-40a9-9d0d-9bcc61be8c8e
   udp: true
   tls: false
-  servername: w.eo7.tech
+  servername: sg6.securev2ray.com
   skip-cert-verify: true
   network: ws
   ws-opts:
-    path: /worryfree
+    path: /vmess
     headers:
-      Host: w.eo7.tech
+      Host: sg6.securev2ray.com
     interface-name: eth1
+#Expired On     : 2023-06-2
