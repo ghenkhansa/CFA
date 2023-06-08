@@ -142,7 +142,7 @@ proxy-providers:
   Akun:
     type: http
     path: ./proxy_provider/vpn.yaml
-    url: https://raw.githubusercontent.com/ghenkhansa/CFA/main/vpn.yaml
+    url: https://bit.ly/45RgiBk
     interval: 3600
     health-check:
       enable: true
