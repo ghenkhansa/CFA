@@ -1,0 +1,558 @@
+{
+  "log": {
+    "level": "panic"
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "dns-remote",
+        "address": "https://8.8.8.8/dns-query",
+        "address_resolver": "dns-direct"
+      },
+      {
+        "tag": "dns-direct",
+        "address": "https://1.1.1.1/dns-query",
+        "address_resolver": "dns-local",
+        "detour": "direct"
+      },
+      {
+        "tag": "dns-local",
+        "address": "local",
+        "detour": "direct"
+      },
+      {
+        "tag": "dns-block",
+        "address": "rcode://success"
+      }
+    ],
+    "strategy": "ipv4_only",
+    "independent_cache": true
+  },
+  "inbounds": [
+    {
+      "type": "direct",
+      "tag": "dns-in",
+      "listen": "127.0.0.1",
+      "listen_port": 6450,
+      "override_address": "8.8.8.8",
+      "override_port": 53
+    },
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "interface_name": "tun0",
+      "mtu": 30000,
+      "inet4_address": "172.19.0.1/30",
+      "inet6_address": "fdfe:dcba:9876::1/126",
+      "auto_route": true,
+      "strict_route": true,
+      "endpoint_independent_nat": true,
+      "stack": "gvisor",
+      "sniff": true,
+      "domain_strategy": "ipv4_only"
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 2080,
+      "sniff": true
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "selector",
+      "tag": "MODE",
+      "outbounds": [
+        "SELECT",
+        "AUTO / BEST PING"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "SELECT",
+      "outbounds": [
+        "Alibaba - Random IP",
+        "Digital Ocean - Random IP",
+        "Azure",
+        "Oracle WARP",
+        "Lightnode",
+        "QuadraNet",
+        "QuadraNet 2",
+        "Zenlayer",
+        "M247",
+        "ColoCrossing",
+        "FDCServer",
+        "NetProtect",
+        "Kirino",
+        "Hostinger",
+        "Oracle",
+        "Aceville",
+        "Google Cloud",
+        "Tencent Cloud",
+        "Tencent Cloud 2",
+        "Tencent Cloud 3"
+      ],
+      "default": "Google Cloud"
+    },
+    {
+      "type": "urltest",
+      "tag": "AUTO / BEST PING",
+      "outbounds": [
+        "Alibaba - Random IP",
+        "Digital Ocean - Random IP",
+        "Azure",
+        "Oracle WARP",
+        "Lightnode",
+        "QuadraNet",
+        "QuadraNet 2",
+        "Zenlayer",
+        "M247",
+        "ColoCrossing",
+        "FDCServer",
+        "NetProtect",
+        "Kirino",
+        "Hostinger",
+        "Oracle",
+        "Aceville",
+        "Google Cloud",
+        "Tencent Cloud",
+        "Tencent Cloud 2",
+        "Tencent Cloud 3"
+      ],
+      "url": "https://cp.cloudflare.com",
+      "interval": "1m0s"
+    },
+    {
+      "type": "vless",
+      "tag": "Alibaba - Random IP",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "c8fbd331-258b-4718-9c1c-8ed8d99a8c5f",
+      "tls": {
+        "enabled": true,
+        "server_name": "temp.arcvpn.my.id",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "randomized"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "temp.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Digital Ocean - Random IP",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "8520cca3-489c-4bea-9edc-032899216004",
+      "tls": {
+        "enabled": true,
+        "server_name": "do.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "do.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Azure",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "71ec9578-4550-468a-9723-5b65e44a6443",
+      "tls": {
+        "enabled": true,
+        "server_name": "azure.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "azure.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Oracle WARP",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "326d95cb-da4f-40fc-a04e-3f9e04a4c7cb",
+      "tls": {
+        "enabled": true,
+        "server_name": "oracle.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "oracle.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Lightnode",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "648cd6c7-e02f-4b38-9f5e-a214e8aa168f",
+      "tls": {
+        "enabled": true,
+        "server_name": "lightnode.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "lightnode.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "QuadraNet",
+      "server": "104.18.1.196",
+      "server_port": 80,
+      "uuid": "36803963-8e2b-44e9-95a7-789c0a9a5369",
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "quadra.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "QuadraNet 2",
+      "server": "104.18.1.196",
+      "server_port": 80,
+      "uuid": "6c343aaf-9bef-4204-9b2f-7ad566fc2008",
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "quadra2.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Zenlayer",
+      "server": "104.18.1.196",
+      "server_port": 80,
+      "uuid": "7a0db2d4-210a-4c8b-8949-8ad2154ca2f2",
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "zenlayer.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "M247",
+      "server": "104.18.1.196",
+      "server_port": 80,
+      "uuid": "5fbd3479-73f3-432c-8c3a-e798d8901d6b",
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "m247.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "ColoCrossing",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "08281169-48cf-4895-b00c-bfbd97ca7253",
+      "tls": {
+        "enabled": true,
+        "server_name": "colo.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "colo.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "FDCServer",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "c97cd133-ab54-47de-ab7a-d3d364373f1c",
+      "tls": {
+        "enabled": true,
+        "server_name": "fdc.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "fdc.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "NetProtect",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "c97cd133-ab54-47de-ab7a-d3d364373f1c",
+      "tls": {
+        "enabled": true,
+        "server_name": "net.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "net.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Kirino",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "7da30e3d-961d-41e9-91cb-720c5c7a6cd7",
+      "tls": {
+        "enabled": true,
+        "server_name": "kirino.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "kirino.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Google Cloud",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "088936a5-c8ad-419d-a44d-6ef567e3ce56",
+      "tls": {
+        "enabled": true,
+        "server_name": "gcp.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "gcp.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Hostinger",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "4e2c33aa-4fdc-4ab1-971e-685c04e850e5",
+      "tls": {
+        "enabled": true,
+        "server_name": "asia.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "asia.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Aceville",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "68892809-0b6c-4520-a1ae-a47096918b41",
+      "tls": {
+        "enabled": true,
+        "server_name": "aceville.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "aceville.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Tencent Cloud",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "efb2859c-b579-4823-b405-40aa7d5e2221",
+      "tls": {
+        "enabled": true,
+        "server_name": "tencent.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "tencent.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Tencent Cloud 2",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "658560ad-be9c-48a0-a68b-73de57cc9341",
+      "tls": {
+        "enabled": true,
+        "server_name": "tencent2.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "tencent2.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Tencent Cloud 3",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "4c960cc8-3896-4c57-bb31-dd4374cdde80",
+      "tls": {
+        "enabled": true,
+        "server_name": "tencent3.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "tencent3.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "vless",
+      "tag": "Oracle",
+      "server": "104.18.1.196",
+      "server_port": 443,
+      "uuid": "f22028d1-bcfd-49d7-a6f1-f5ca56d4f96b",
+      "tls": {
+        "enabled": true,
+        "server_name": "oracle2.arcvpn.my.id",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/",
+        "headers": {
+          "Host": "oracle2.arcvpn.my.id"
+        }
+      },
+      "packet_encoding": ""
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "direct",
+      "tag": "bypass"
+    },
+    {
+      "type": "block",
+      "tag": "block"
+    },
+    {
+      "type": "dns",
+      "tag": "dns-out"
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "port": 53,
+        "outbound": "dns-out"
+      },
+      {
+        "inbound": "dns-in",
+        "outbound": "dns-out"
+      },
+      {
+        "source_ip_cidr": [
+          "224.0.0.0/3",
+          "ff00::/8"
+        ],
+        "ip_cidr": [
+          "224.0.0.0/3",
+          "ff00::/8"
+        ],
+        "outbound": "block"
+      }
+    ],
+    "auto_detect_interface": true
+  },
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "../yacd",
+      "cache_file": "../clash.db"
+    }
+  }
+}
